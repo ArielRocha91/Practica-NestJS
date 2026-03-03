@@ -44,4 +44,9 @@ export class UsersService {
     }
     return `Usuario con id ${id} eliminado`;
   }
+
+  async findOneByEmail(email: string) {
+    return await this.userRepository.findOneBy({ email });
+  }
+
 }
