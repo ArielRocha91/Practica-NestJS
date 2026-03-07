@@ -3,6 +3,7 @@ import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import * as bcryptjs from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from './enums/rol.enum';
 
 @Injectable()
 export class AuthService {
@@ -21,11 +22,13 @@ export class AuthService {
 
         const hashPassword = await bcryptjs.hash(password, 10);
 
+        const roleValue = (typeof arguments[0].rol === 'string' && arguments[0].rol)? arguments[0].rol : Role.User;
+
         await this.usersService.create({
             name,
             email,
             password: hashPassword,
-            rol: 'user'
+            rol: roleValue
         });
         return{
             name,
@@ -44,7 +47,7 @@ export class AuthService {
             throw new NotFoundException('Contraseña incorrecta');
         }
 
-        const payload = { email: user.email };
+        const payload = { email: user.email, role: user.rol };
 
         const token = await this.jwtService.signAsync(payload);
 

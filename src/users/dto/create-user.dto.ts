@@ -1,4 +1,5 @@
-import { IsString, MinLength } from "class-validator";
+import { IsEnum, IsString, MinLength } from "class-validator";
+import { Role } from "src/auth/enums/rol.enum";
 
 export class CreateUserDto {
 
@@ -12,7 +13,7 @@ export class CreateUserDto {
     @MinLength(3)
     password: string;
 
-    @IsString()
-    rol: string;
+    @IsEnum(Role)
+    rol: Role;
 
 }
