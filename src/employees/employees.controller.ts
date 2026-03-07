@@ -6,16 +6,20 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { Role } from 'src/auth/enums/rol.enum';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Auth } from 'src/auth/decorator/auth.decorator';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Employees Controller')
 @UseGuards(AuthGuard)
-@Auth(Role.Admin)
-@UseGuards(AuthGuard, RolesGuard)
+// @Auth(Role.Admin)
+// @UseGuards(AuthGuard, RolesGuard)
 
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Crear un nuevo empleado' })
   create(@Body() createEmployeeDto: CreateEmployeeDto) {
     return this.employeesService.create(createEmployeeDto);
   }
